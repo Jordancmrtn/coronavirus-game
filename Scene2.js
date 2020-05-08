@@ -100,8 +100,10 @@ class Scene2 extends Phaser.Scene {
 	update() {
 		if (gameState.cursors.left.isDown) {
 			gameState.player.setVelocityX(-280);
+			gameState.player.flipX = true;
 		} else if (gameState.cursors.right.isDown) {
 			gameState.player.setVelocityX(280);
+			gameState.player.flipX = false;
 		} else {
 			gameState.player.setVelocityX(0);
 		}
