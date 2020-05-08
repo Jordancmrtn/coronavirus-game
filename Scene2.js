@@ -19,7 +19,7 @@ class Scene2 extends Phaser.Scene {
 		
 		gameState.player.setCollideWorldBounds(true);
 
-		gameState.scoreText = this.add.text(190, 575, 'Score: 0', { fontSize: '15px', fill: '#333333' }).setDepth(3);
+		gameState.scoreText = this.add.text(210, 575, 'Score: 0', { fontSize: '15px', fill: '#333333' }).setDepth(3);
 
 
 		const platforms = this.physics.add.staticGroup();
@@ -69,6 +69,9 @@ class Scene2 extends Phaser.Scene {
 			gameState.gameOver = this.add.image(250,270, 'gameOver')
 			gameState.reStart = this.add.image(250,450, 'restartButton').setScale(0.6)
 			gameState.reStart.setInteractive({ cursor: 'pointer' })
+
+			gameState.scoreTextFinal = this.add.text(170, 380, `Score final: ${gameState.score}`, { fontSize: '17px', fill: '#333333'}).setDepth(3);
+			gameState.scoreText.setText(` `)
 
 
 			gameState.reStart.on('pointerup', () => {
