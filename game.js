@@ -13,7 +13,10 @@ const config = {
 			gravity: { y: 200 },
 			enableBody: true,
 		}
-	},
+  },
+  audio: {
+    disableWebAudio: true
+  },
   scene: [Scene1, Scene2]
 };
 

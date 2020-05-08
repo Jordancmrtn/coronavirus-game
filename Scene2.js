@@ -9,6 +9,8 @@ class Scene2 extends Phaser.Scene {
 		this.load.image('virus', './assets/virus.png');
 		this.load.image('gameOver', './assets/gameOver.png');
 		this.load.image('restartButton', './assets/restartButton.png');
+		this.load.audio('music', './assets/Music/musique.mp3');
+		this.load.audio('lose', './assets/Music/lose.mp3');
 
 	}
   
@@ -51,10 +53,23 @@ class Scene2 extends Phaser.Scene {
 
 		this.physics.add.collider(gameState.player, virus, () => {
 			virusGenLoop.destroy();
+			gameState.lose = this.sound.add('lose')
+			let loseMusicConfig = {
+				mute : false,
+				volume : 1,
+				rate : 1,
+				detune : 0,
+				seek : 0,
+				loop : false,
+				delay : 0
+			}
+			gameState.lose.play(loseMusicConfig)
+			gameState.music.stop()
 			this.physics.pause();
 			gameState.gameOver = this.add.image(250,270, 'gameOver')
 			gameState.reStart = this.add.image(250,450, 'restartButton').setScale(0.6)
 			gameState.reStart.setInteractive({ cursor: 'pointer' })
+
 
 			gameState.reStart.on('pointerup', () => {
 				gameState.score = 0;
@@ -68,6 +83,18 @@ class Scene2 extends Phaser.Scene {
 				gameState.reStart.setScale(0.6);
 			});
 		});
+
+		gameState.music = this.sound.add('music')
+		let musicConfig = {
+			mute : false,
+			volume : 0.2,
+			rate : 1,
+			detune : 0,
+			seek : 0,
+			loop : true,
+			delay : 0
+		}
+		gameState.music.play(musicConfig)
 	}
 	
 	update() {
