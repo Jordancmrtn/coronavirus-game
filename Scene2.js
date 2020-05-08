@@ -60,6 +60,13 @@ class Scene2 extends Phaser.Scene {
 				gameState.score = 0;
 				this.scene.restart();
 			});
+
+			gameState.reStart.on('pointerover',() =>{
+				gameState.reStart.setScale(0.7);
+			});
+			gameState.reStart.on('pointerout', () => {
+				gameState.reStart.setScale(0.6);
+			});
 		});
 	}
 	
