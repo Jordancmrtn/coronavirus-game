@@ -1,11 +1,12 @@
-class Scene1 extends Phaser.Scene {
+class Accueil extends Phaser.Scene {
 	constructor() {
-		super({ key: 'Scene1' })
+		super({ key: 'Accueil' })
 	}
 	
 	preload(){
 		this.load.image('logo', './assets/logoCoronaVirus.png')
 		this.load.image('startButton', './assets/buttonStart.png')
+		this.load.image('instructionButton', './assets/instructions.png')
 		this.load.audio('intro', './assets/Music/musiqueIntro.mp3');
 	}
 	
@@ -13,13 +14,14 @@ class Scene1 extends Phaser.Scene {
 
 		gameState.logo = this.add.image(250,200, 'logo')
 		gameState.startButton = this.add.image(250, 450, 'startButton').setScale(0.6)
-		this.add.text(52, 500, "Utilise les flèches pour éviter les virus", {fill: '#333333'})
+		gameState.instructionsButton = this.add.image(250, 520, 'instructionButton').setScale(0.6)
 
 
-		
+		gameState.instructionsButton.setInteractive({ cursor: 'pointer' })
 		gameState.startButton.setInteractive({ cursor: 'pointer' })
+
 		gameState.startButton.on('pointerdown', () => {  
-			this.scene.stop('Scene1')
+			this.scene.stop('Accueil')
 			this.scene.start('Scene2')
 			gameState.introMusic.stop()
 		})
@@ -28,6 +30,17 @@ class Scene1 extends Phaser.Scene {
 		});
 		gameState.startButton.on('pointerout', () => {
 			gameState.startButton.setScale(0.6);
+		});
+
+		gameState.instructionsButton.on('pointerdown', () => {  
+			this.scene.stop('Accueil')
+			this.scene.start('Instructions')
+		})
+		gameState.instructionsButton.on('pointerover',() =>{
+			gameState.instructionsButton.setScale(0.7);
+		});
+		gameState.instructionsButton.on('pointerout', () => {
+			gameState.instructionsButton.setScale(0.6);
 		});
 
 		gameState.introMusic = this.sound.add('intro');
