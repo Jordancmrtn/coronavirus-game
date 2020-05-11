@@ -95,15 +95,11 @@ class Scene2 extends Phaser.Scene {
 		}
 		gameState.music.play(musicConfig)
 
-		this.physics.add.collider( gameState.player, gameState.virus, function (player, virus2) {
-			virus2.destroy();
-			gameState.playerLife -= 1
-			console.log("OUPS")
-
-			if (gameState.playerDead === true) {
-				console.log("coucou")
-				let pause = this.physics.bind(pause)
-				// this.bind.physics.pause();
+		const test = function(){
+			console.log("coucou")
+				//this.physics.pause();
+				// this.scene.pause()
+				game.scene.pause()
 				gameState.music.stop()
 				gameState.virusGenLoop.destroy();
 				// gameState.lose = this.sound.add('lose')
@@ -138,9 +134,57 @@ class Scene2 extends Phaser.Scene {
 				// gameState.reStart.on('pointerout', () => {
 				// 	gameState.reStart.setScale(0.6);
 				// });
+		}
+
+		this.physics.add.collider( gameState.player, gameState.virus, function (player, virus2) {
+			if (gameState.playerLife === 3 ||gameState.playerLife === 2){
+			
+			virus2.destroy();
+			gameState.playerLife -= 1
+			console.log("OUPS")
+
+			}else {
+				virus2.destroy();
+				gameState.playerLife -= 1
+				console.log("désolé")
+				gameState.music.stop()
+				gameState.virusGenLoop.destroy();
+				//gameState.lose = this.sound.add('lose')
+				let loseMusicConfig = {
+					mute : false,
+					volume : 1,
+					rate : 1,
+					detune : 0,
+					seek : 0,
+					loop : false,
+					delay : 0
 				}
+				//gameState.lose.play(loseMusicConfig)
+				gameState.leftArrow.destroy()
+				gameState.rightArrow.destroy()
+				//gameState.gameOver = this.add.image(250,250, 'gameOver')
+				//gameState.reStart = this.add.image(250,430, 'restartButton').setScale(0.6)
+				//gameState.reStart.setInteractive({ cursor: 'pointer' })
+	
+				//gameState.scoreTextFinal = this.add.text(170, 360, `Score final: ${gameState.score}`, { fontSize: '17px', fill: '#333333'}).setDepth(3);
+				gameState.scoreText.setText(` `)
+	
+	
+				// gameState.reStart.on('pointerup', () => {
+				// 	gameState.score = 0;
+				// 	this.scene.restart();
+				// });
+	
+				// gameState.reStart.on('pointerover',() =>{
+				// 	gameState.reStart.setScale(0.7);
+				// });
+				// gameState.reStart.on('pointerout', () => {
+				// 	gameState.reStart.setScale(0.6);
+				// });
+			}
 		});
 	}
+
 	
 	update() {
 
@@ -162,50 +206,11 @@ class Scene2 extends Phaser.Scene {
 		} else if (gameState.playerLife === 1){
 			gameState.life2.destroy()
 			gameState.lifeover2 = this.add.image(80,25, 'lifeOver').setDepth(3)
-			gameState.playerDead = true
 		} else if (gameState.playerLife === 0){
 			gameState.life1.destroy()
 			gameState.lifeover1 = this.add.image(40,25, 'lifeOver').setDepth(3)
+			this.physics.pause();
 		}
-		
-		// if (gameState.playerDead === true) {
-		// 	this.physics.pause();
-		// 	// gameState.music.stop()
-		// 	gameState.virusGenLoop.destroy();
-		// 	// gameState.lose = this.sound.add('lose')
-		// 	// let loseMusicConfig = {
-		// 	// 	mute : false,
-		// 	// 	volume : 1,
-		// 	// 	rate : 1,
-		// 	// 	detune : 0,
-		// 	// 	seek : 0,
-		// 	// 	loop : false,
-		// 	// 	delay : 0
-		// 	// }
-		// 	// gameState.lose.play(loseMusicConfig)
-		// 	// gameState.leftArrow.destroy()
-		// 	// gameState.rightArrow.destroy()
-		// 	// gameState.gameOver = this.add.image(250,250, 'gameOver')
-		// 	// gameState.reStart = this.add.image(250,430, 'restartButton').setScale(0.6)
-		// 	// gameState.reStart.setInteractive({ cursor: 'pointer' })
-
-		// 	// gameState.scoreTextFinal = this.add.text(170, 360, `Score final: ${gameState.score}`, { fontSize: '17px', fill: '#333333'}).setDepth(3);
-		// 	// gameState.scoreText.setText(` `)
-
-
-		// 	// gameState.reStart.on('pointerup', () => {
-		// 	// 	gameState.score = 0;
-		// 	// 	this.scene.restart();
-		// 	// });
-
-		// 	// gameState.reStart.on('pointerover',() =>{
-		// 	// 	gameState.reStart.setScale(0.7);
-		// 	// });
-		// 	// gameState.reStart.on('pointerout', () => {
-		// 	// 	gameState.reStart.setScale(0.6);
-		// 	// });
-		// 	return
-		// }
 
 	}
 
