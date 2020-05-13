@@ -96,7 +96,7 @@ class Scene2 extends Phaser.Scene {
 			loop : true,
 			delay : 0
 		}
-		//gameState.music.play(musicConfig)
+		gameState.music.play(musicConfig)
 
 		const endGame = (player, virus) => {
 			
@@ -105,7 +105,7 @@ class Scene2 extends Phaser.Scene {
 			this.cameras.main.shake(240, .01, false)
 
 		if (gameState.playerLife === 2){
-			
+
 			gameState.aieSound.play()
 			gameState.life3.destroy()
 			gameState.lifeover3 = this.add.image(120,25, 'lifeOver').setDepth(3)
