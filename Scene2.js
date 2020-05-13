@@ -11,15 +11,19 @@ class Scene2 extends Phaser.Scene {
 		this.load.image('leftArrow', './assets/leftArrow.png');
 		this.load.image('rightArrow', './assets/rightArrow.png');
 		this.load.image('restartButton', './assets/restartButton.png');
+		this.load.image('life', './assets/life.png');
+		this.load.image('lifeOver', './assets/lifeover.png');
 		this.load.audio('music', './assets/Music/musique.mp3');
 		this.load.audio('lose', './assets/Music/lose.mp3');
-
+		this.load.audio('aie', './assets/Music/aie.mp3');
 	}
   
   create() {
-		gameState.player = this.physics.add.sprite(225, 450, 'perso').setScale(0.6)
+		gameState.player = this.physics.add.sprite(225, 450, 'perso').setScale(0.6).setDepth(3).setGravityY(400)
 		
 		gameState.player.setCollideWorldBounds(true);
+
+		gameState.aieSound = this.sound.add('aie')
 
 		gameState.scoreText = this.add.text(210, 550, 'Score: 0', { fontSize: '15px', fill: '#FFFFFF' }).setDepth(3);
 
@@ -55,29 +59,70 @@ class Scene2 extends Phaser.Scene {
 			gameState.player.setVelocityX(0);
 		});
 
+		gameState.life1 = this.add.image(40,25, 'life').setDepth(3)
+		gameState.life2 = this.add.image(80,25, 'life').setDepth(3)
+		gameState.life3 = this.add.image(120,25, 'life').setDepth(3)
+		gameState.playerLife = 3
+		gameState.playerDead = false
 
-		const virus = this.physics.add.group()
+
+		 gameState.virus = this.physics.add.group()
 
 		const virusGenerator = () => {
 			const xCoord = Math.random() * 640
-			virus.create(xCoord, 10, 'virus')
+			gameState.virus.create(xCoord, 10, 'virus')
 		}
 
-		const virusGenLoop = this.time.addEvent({
+		gameState.virusGenLoop = this.time.addEvent({
 			delay: 100,
 			callback: virusGenerator,
 			callbackScope: this,
 			loop: true,
 		});
 
-		this.physics.add.collider(virus, platforms, function (virus) {
+		this.physics.add.collider(gameState.virus, platforms, function (virus) {
 			virus.destroy();
 			gameState.score += 10;
 			gameState.scoreText.setText(`Score: ${gameState.score}`);
 		})
 
-		this.physics.add.collider(gameState.player, virus, () => {
-			virusGenLoop.destroy();
+		gameState.music = this.sound.add('music')
+		let musicConfig = {
+			mute : false,
+			volume : 0.2,
+			rate : 1,
+			detune : 0,
+			seek : 0,
+			loop : true,
+			delay : 0
+		}
+		//gameState.music.play(musicConfig)
+
+		const endGame = (player, virus) => {
+			
+			virus.destroy();
+			gameState.playerLife -= 1
+			this.cameras.main.shake(240, .01, false)
+
+		if (gameState.playerLife === 2){
+			
+			gameState.aieSound.play()
+			gameState.life3.destroy()
+			gameState.lifeover3 = this.add.image(120,25, 'lifeOver').setDepth(3)
+		} else if (gameState.playerLife === 1){
+
+			gameState.aieSound.play()
+			gameState.life2.destroy()
+			gameState.lifeover2 = this.add.image(80,25, 'lifeOver').setDepth(3)
+		} else if (gameState.playerLife === 0){
+
+			gameState.life1.destroy()
+			gameState.lifeover1 = this.add.image(40,25, 'lifeOver').setDepth(3)
+			gameState.player.setTint(0xff0000);
+			this.physics.pause();
+			gameState.music.stop()
+
+			gameState.virusGenLoop.destroy();
 			gameState.lose = this.sound.add('lose')
 			let loseMusicConfig = {
 				mute : false,
@@ -91,8 +136,6 @@ class Scene2 extends Phaser.Scene {
 			gameState.lose.play(loseMusicConfig)
 			gameState.leftArrow.destroy()
 			gameState.rightArrow.destroy()
-			gameState.music.stop()
-			this.physics.pause();
 			gameState.gameOver = this.add.image(250,250, 'gameOver')
 			gameState.reStart = this.add.image(250,430, 'restartButton').setScale(0.6)
 			gameState.reStart.setInteractive({ cursor: 'pointer' })
@@ -112,20 +155,12 @@ class Scene2 extends Phaser.Scene {
 			gameState.reStart.on('pointerout', () => {
 				gameState.reStart.setScale(0.6);
 			});
-		});
-
-		gameState.music = this.sound.add('music')
-		let musicConfig = {
-			mute : false,
-			volume : 0.2,
-			rate : 1,
-			detune : 0,
-			seek : 0,
-			loop : true,
-			delay : 0
 		}
-		gameState.music.play(musicConfig)
 	}
+
+		this.physics.add.collider( gameState.player, gameState.virus, endGame) 			
+}
+
 	
 	update() {
 		if (gameState.cursors.left.isDown) {
@@ -134,8 +169,10 @@ class Scene2 extends Phaser.Scene {
 		} else if (gameState.cursors.right.isDown) {
 			gameState.player.setVelocityX(280);
 			gameState.player.flipX = false;
-		} else {
+		} else if (gameState.cursors.up.isDown && gameState.player.body.onFloor()){
+			gameState.player.setVelocityY(-250);
+		}else {
 			gameState.player.setVelocityX(0);
 		}
-	}
-}
+	}		
+}	
