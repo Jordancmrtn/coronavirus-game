@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=B612:700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="./assets/favicon.png" />
     <style>
-      canvas {
+      /* canvas {
         width: 450px;
       }
       body{
@@ -16,10 +16,25 @@
         flex-direction: column-reverse;
         font-family: 'B612', sans-serif;
         font-size: 12px;
+      } */
+      html, body {
+        margin: 0;
+        background-color: #ffffff;
+        /* display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column-reverse; */
+        font-family: 'B612', sans-serif;
+        font-size: 12px;
+        text-align: center;
+        }
+      canvas{
+        margin-left: 0px !important
       }
     </style>
 </head>
 <body>
+  <div id="phaserGame"></div>
   <p>Created by Jordan - @2020 - V 3.0 - <a href="https://www.linkedin.com/in/jordancaumartin/" target="_blank">Linkedin Profil</a></p>
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.min.js"></script>
   <script src="Accueil.js"></script>
