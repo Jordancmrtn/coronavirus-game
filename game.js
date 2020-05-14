@@ -4,9 +4,16 @@ const gameState = {
 
 const config = {
   type: Phaser.AUTO,
-  width: 500,
-  height: 600,
+  // width: 500,
+  // height: 600,
   backgroundColor: "f4f4f4",
+  scale: {
+    mode: Phaser.Scale.FIT,
+    parent: 'phaserGame',
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 500,
+    height: 600,
+  },
   physics: {
 		default: 'arcade',
 		arcade: {
